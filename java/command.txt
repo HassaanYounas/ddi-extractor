@@ -1,0 +1,1 @@
+java -cp "*" -mx1600m edu.stanford.nlp.ie.crf.CRFClassifier -prop ./props.prop
