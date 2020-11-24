@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/api/ner', methods=['GET'])
 def ner():
-    drugs = ddi.ner(request.get_json().get('text', ''))
+    drugs = ddi.named_entity_recognition(request.get_json().get('text', ''))
     response = app.response_class(
         response = json.dumps(drugs),
         status = 200,
@@ -15,7 +15,7 @@ def ner():
 
 @app.route('/api/re', methods=['GET'])
 def re():
-    drugs = ddi.ner(request.get_json().get('text', ''))
+    drugs = ddi.named_entity_recognition(request.get_json().get('text', ''))
     response = app.response_class(
         response = json.dumps(drugs),
         status = 200,

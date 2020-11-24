@@ -116,7 +116,7 @@ def generate(path, save_path, model):
                 first = 'drug' + str(pair[0][-1:]) 
                 second = 'drug' + str(pair[1][-1:])
                 relations.append((first, second, pair[2]))
-            sentence_file.write(sentence_text + '\n')      
+            sentence_file.write(sentence_text + '\n')
             for pair in relations:
                 relations_file.write(pair[0] + ' ' + pair[1] + ' ' + pair[2] + '\n')
             relations_file.write('\n')
