@@ -1,3 +1,5 @@
 __pycache__
 ddi-venv
 corpora
+ddi/re/testing
+ddi/re/training

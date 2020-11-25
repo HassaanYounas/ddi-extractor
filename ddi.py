@@ -1,20 +1,32 @@
-import os, json, re, random, glob
-from bs4 import BeautifulSoup
 import numpy as np
-from keras.models import load_model
+from bs4 import BeautifulSoup
+import os, json, re, random, glob
 from gensim.models import Word2Vec
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+from keras.models import model_from_json
 
 java_path = 'C:/Program Files/Java/jre1.8.0_271/bin'
 os.environ['JAVAHOME'] = java_path
 
-def named_entity_recognition(text):
-    ner = StanfordNERTagger(
+def get_ner_model():
+    return StanfordNERTagger(
         './ai-models/ner-model.ser.gz', 
         './java/stanford-ner.jar', 
         encoding = 'utf-8'
     )
+
+def get_re_model():
+    json_file = open('./ai-models/lstm.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    model = model_from_json(loaded_model_json)
+    model.load_weights('./ai-models/lstm.h5') 
+    model.compile(optimizer = 'adam', loss = 'binary_crossentropy')
+    return model
+
+def named_entity_recognition(text):
+    ner = get_ner_model()
     drugs = { 'drug': [], 'drug-n': [], 'group': [], 'brand': [] }
     tags = ner.tag(word_tokenize(text))
     for token in tags:
@@ -23,13 +35,10 @@ def named_entity_recognition(text):
     return drugs
 
 def relation_extraction(text):
+    relations = []
     drug_count = 0
-    entities, pairs, word_embeddings, sentence_pairs, vec_pairs = [], [], [], [], []
-    ner = StanfordNERTagger(
-        './ai-models/ner-model.ser.gz', 
-        './java/stanford-ner.jar', 
-        encoding = 'utf-8'
-    )
+    entities, pairs, sentence_pairs, vec_pairs, x_predict = [], [], [], [], []
+    ner = get_ner_model()
     tags = ner.tag(word_tokenize(text))
     to_skip , count = 0, 0
     for i in range(len(tags)):
@@ -78,9 +87,8 @@ def relation_extraction(text):
                     try:
                         vec_pair.append(round(10 * sum(word2vec[token]), 4))
                     except:
-                        vec_pair.append(round(10 * random.random()), 4)
+                        vec_pair.append(round(10 * random.random(), 4))
             vec_pairs.append(vec_pair)
-        x_predict = []
         for vec_pair in vec_pairs:
             index_first = [i for i, n in enumerate(vec_pair) if n == 1][0]
             index_second = [i for i, n in enumerate(vec_pair) if n == 1][1]
@@ -92,12 +100,17 @@ def relation_extraction(text):
             x_predict.append(features)
         x_predict = np.array(x_predict)
         x_predict = x_predict.reshape(len(x_predict), 128, 3)
-        model = load_model('./ai-models/lstm.h5')
+        model = get_re_model()
         pred_output = model.predict(x_predict, batch_size = 200)
         for i in range(len(pred_output)):
+            first, second = '', ''
+            for drug in entities:
+                if drug[1] == pairs[i][0]:
+                    first = drug[0]
+                if drug[1] == pairs[i][1]:
+                    second = drug[0]
             if pred_output[i][0] < 0.5:
-                print(pairs[i], 'False')
+                relations.append({ 'first': first, 'second': second, 'ddi': False })
             else:
-                print(pairs[i], 'True')
-    print(entities)
-    return
+                relations.append({ 'first': first, 'second': second, 'ddi': True })
+    return relations

@@ -82,7 +82,11 @@ model.add(Bidirectional(LSTM(128, input_shape = (128, 3))))
 model.add(Dense(2, activation = 'softmax'))
 model.compile(optimizer = 'adam', loss = 'binary_crossentropy')
 model.fit(x_train, y_train, batch_size = 200, epochs = 100, shuffle = True)
-model.save('../../ai-models/lstm.h5')
+
+model_json = model.to_json()
+with open('../../ai-models/lstm.json', 'w') as json_file:
+    json_file.write(model_json)
+model.save_weights('../../ai-models/lstm.h5')
 
 pred_output = model.predict(x_test, batch_size = 200)
 for pred in pred_output:
