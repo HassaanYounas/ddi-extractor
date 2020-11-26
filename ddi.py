@@ -29,9 +29,26 @@ def named_entity_recognition(text):
     ner = get_ner_model()
     drugs = { 'drug': [], 'drug-n': [], 'group': [], 'brand': [] }
     tags = ner.tag(word_tokenize(text))
-    for token in tags:
-        if token[1] is not 'O':
-            drugs[token[1]].append({ 'name': token[0] })
+    to_skip , entities = 0, []
+    for i in range(len(tags)):
+        if tags[i][1] is not 'O':
+            if to_skip == 0:
+                if i != len(tags) - 1 and tags[i + 1][1] is not 'O':
+                    drug_name = tags[i][0] + ' '
+                    for j in range(i + 1, len(tags)):
+                        if tags[j][1] is 'O':
+                            break
+                        else:
+                            to_skip += 1
+                            drug_name += tags[j][0] + ' '
+                    entities.append((drug_name.strip(), tags[i][1]))
+                else:
+                    entities.append((tags[i][0], tags[i][1]))
+            else:
+                to_skip -= 1
+    for drug in entities:
+        if drug[1] is not 'O':
+            drugs[drug[1]].append({ 'name': drug[0] })
     return drugs
 
 def relation_extraction(text):

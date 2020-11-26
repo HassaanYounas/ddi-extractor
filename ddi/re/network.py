@@ -74,31 +74,33 @@ x_train = np.array(x_train)
 x_train = x_train.reshape(len(x_train), 128, 3)
 y_train = np.array(interactions)
 
+print(y_train)
+
 x_test = np.array(x_test)
 x_test = x_test.reshape(len(x_test), 128, 3)
 
-model = Sequential()
-model.add(Bidirectional(LSTM(128, input_shape = (128, 3))))
-model.add(Dense(2, activation = 'softmax'))
-model.compile(optimizer = 'adam', loss = 'binary_crossentropy')
-model.fit(x_train, y_train, batch_size = 200, epochs = 100, shuffle = True)
+# model = Sequential()
+# model.add(Bidirectional(LSTM(128, input_shape = (128, 3))))
+# model.add(Dense(2, activation = 'softmax'))
+# model.compile(optimizer = 'adam', loss = 'binary_crossentropy')
+# model.fit(x_train, y_train, batch_size = 200, epochs = 100, shuffle = True)
 
-model_json = model.to_json()
-with open('../../ai-models/lstm.json', 'w') as json_file:
-    json_file.write(model_json)
-model.save_weights('../../ai-models/lstm.h5')
+# model_json = model.to_json()
+# with open('../../ai-models/lstm.json', 'w') as json_file:
+#     json_file.write(model_json)
+# model.save_weights('../../ai-models/lstm.h5')
 
-pred_output = model.predict(x_test, batch_size = 200)
-for pred in pred_output:
-    if pred[0] < 0.5:
-        test_output_file.write('0' + ' ' + '1' + '\n')
-    else:
-        test_output_file.write('1' + ' ' + '0' + '\n')
+# pred_output = model.predict(x_test, batch_size = 200)
+# for pred in pred_output:
+#     if pred[0] < 0.5:
+#         test_output_file.write('0' + ' ' + '1' + '\n')
+#     else:
+#         test_output_file.write('1' + ' ' + '0' + '\n')
 
-vectors_file.close()
-distances_file.close()
-output_file.close()
+# vectors_file.close()
+# distances_file.close()
+# output_file.close()
 
-test_vectors_file.close()
-test_distances_file.close()
-test_output_file.close()
+# test_vectors_file.close()
+# test_distances_file.close()
+# test_output_file.close()
