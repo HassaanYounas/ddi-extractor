@@ -19,6 +19,10 @@ def input_text():
 def input_file():
     return render_template('/input/ddi-file.html')
 
+@app.errorhandler(404)
+def error(e):
+    return render_template('404.html'), 404
+
 @app.route('/api/ner', methods = ['POST'])
 def ner():
     drugs = ddi.named_entity_recognition(request.get_json().get('text', ''))

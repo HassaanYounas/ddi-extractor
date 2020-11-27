@@ -22,6 +22,10 @@ body {
     text-decoration: none;
 }
 
+.custom-file-input:hover, custom-file-label:hover {
+    cursor: pointer;
+}
+
 .btn-link-custom {
     color: #000;
 }
