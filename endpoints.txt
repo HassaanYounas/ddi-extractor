@@ -4,12 +4,41 @@
     },
     {
         "text": "The fluoroquinolones are a rapidly growing class of antibiotics with a broad spectrum of activity against gram-negative and some gram-positive aerobic bacteria."
+    },
+    {
+        "text": "Although much statistical work has focused on developing mathematical functions to model the joint dose-response curves, relatively little work exists in regard to designing experiments for assessing joint action."
     }
 
 2. localhost:5000/api/re
     {
-        "text": "The fluoroquinolones for urinary tract infections: a review."
+        "text": "Aspirin should be used cautiously in conjunction with corticosteroids in patients suffering from hypoprothrombinemia."
     },
     {
-        "text": "The fluoroquinolones are a rapidly growing class of antibiotics with a broad spectrum of activity against gram-negative and some gram-positive aerobic bacteria."
+        "text": "The effect of methylprednisolone on oral anticoagulants is variable."
+    },
+    {
+        "text": "Note: dissolution of aerosol particles of budesonide in Survanta, a model lung surfactant."
     }
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+ENTITIES: { 
+    'drug': [{
+        'name': ''
+    }], 
+    'drug-n': [{
+        'name': ''
+    }],  
+    'group': [{
+        'name': ''
+    }],  
+    'brand': [{
+        'name': ''
+    }]
+}
+
+RELATIONS: [{
+    'first': '',
+    'second': '',
+    'ddi': ''
+}]
