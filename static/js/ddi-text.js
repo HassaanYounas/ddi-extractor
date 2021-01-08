@@ -79,4 +79,6 @@ function backToInputText() {
     input.classList.remove('d-none');
     outputEntities.classList.add('d-none');
     outputRelations.classList.add('d-none');
+    document.getElementById('entitiesTableBody').innerHTML = '';
+    document.getElementById('relationsTableBody').innerHTML = '';
 }
